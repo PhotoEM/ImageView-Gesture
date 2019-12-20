@@ -9,3 +9,4 @@ V0.1 TODO list
 ## Develop LOG
 2019.12.03 create project
 2019.12.06 getSlideValue function done. But need to identify slide left or up.
+2019.12.09 identify slide left right and up down. DOING: left right slide change the button view.

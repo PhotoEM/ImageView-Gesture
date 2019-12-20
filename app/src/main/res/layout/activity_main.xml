@@ -5,12 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <com.photoEM.gesture.GestureImageView
-            android:id="@+id/zoomView"
+            android:id="@+id/MainImageView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerInParent="true">
@@ -20,22 +21,274 @@
                 android:layout_height="300dp"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:src="@drawable/avatar" />
+                android:src="@drawable/avatar"
+                android:contentDescription="TODO" />
 
-            <RelativeLayout
-                android:id="@+id/GVInnerRelativeLayout"
+            <HorizontalScrollView
                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true" >
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:fillViewport="true"
+                android:scrollbars="none">
 
-                <TextView
-                    android:id="@+id/EditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="TextView" >
-                </TextView>
+                <RelativeLayout
+                    android:id="@+id/GVInnerRelativeLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
 
-            </RelativeLayout>
+                    <!--Luminance-->
+                    <com.photoEM.gesture.GridTextView
+                        android:id="@+id/GridLuminance"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="4dp"
+                        android:background="@drawable/grid_shape">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/GridLuminanceValue"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="end"
+                                android:text="@string/BasicValue"
+                                android:textColor="#fff"
+                                android:textSize="21sp" />
+
+                            <TextView
+                                android:id="@+id/GridLuminanceText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/Luminance"
+                                android:textColor="#fff"
+                                android:textSize="10sp" />
+                        </LinearLayout>
+
+                    </com.photoEM.gesture.GridTextView>
+
+                    <!--Contrast-->
+                    <com.photoEM.gesture.GridTextView
+                        android:id="@+id/GridContrast"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="4dp"
+                        android:layout_toEndOf="@+id/GridLuminance"
+                        android:background="@drawable/grid_shape">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/GridContrastValue"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="end"
+                                android:text="@string/BasicValue"
+                                android:textColor="#fff"
+                                android:textSize="21sp" />
+
+                            <TextView
+                                android:id="@+id/GridContrastText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/Contrast"
+                                android:textColor="#fff"
+                                android:textSize="10sp" />
+                        </LinearLayout>
+
+                    </com.photoEM.gesture.GridTextView>
+
+                    <!--Exposure-->
+                    <com.photoEM.gesture.GridTextView
+                        android:id="@+id/GridExposure"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="4dp"
+                        android:layout_toEndOf="@+id/GridContrast"
+                        android:background="@drawable/grid_shape">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/GridExposureValue"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="end"
+                                android:text="@string/BasicValue"
+                                android:textColor="#fff"
+                                android:textSize="21sp" />
+
+                            <TextView
+                                android:id="@+id/GridExposureText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/Exposure"
+                                android:textColor="#fff"
+                                android:textSize="10sp" />
+                        </LinearLayout>
+
+                    </com.photoEM.gesture.GridTextView>
+
+                    <!--HighLight-->
+                    <com.photoEM.gesture.GridTextView
+                        android:id="@+id/GridHighLight"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="4dp"
+                        android:layout_toEndOf="@+id/GridExposure"
+                        android:background="@drawable/grid_shape">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/GridHighLightValue"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="end"
+                                android:text="@string/BasicValue"
+                                android:textColor="#fff"
+                                android:textSize="21sp" />
+
+                            <TextView
+                                android:id="@+id/GridHighLightText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/HighLight"
+                                android:textColor="#fff"
+                                android:textSize="10sp" />
+                        </LinearLayout>
+
+                    </com.photoEM.gesture.GridTextView>
+
+                    <!--Shadows-->
+                    <com.photoEM.gesture.GridTextView
+                        android:id="@+id/GridShadows"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="4dp"
+                        android:layout_toEndOf="@+id/GridHighLight"
+                        android:background="@drawable/grid_shape">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/GridShadowsValue"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="end"
+                                android:text="@string/BasicValue"
+                                android:textColor="#fff"
+                                android:textSize="21sp" />
+
+                            <TextView
+                                android:id="@+id/GridShadowsText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/Shadows"
+                                android:textColor="#fff"
+                                android:textSize="10sp" />
+                        </LinearLayout>
+
+                    </com.photoEM.gesture.GridTextView>
+
+                    <!--Whites-->
+                    <com.photoEM.gesture.GridTextView
+                        android:id="@+id/GridWhites"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="4dp"
+                        android:layout_toEndOf="@+id/GridShadows"
+                        android:background="@drawable/grid_shape">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/GridWhitesValue"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="end"
+                                android:text="@string/BasicValue"
+                                android:textColor="#fff"
+                                android:textSize="21sp" />
+
+                            <TextView
+                                android:id="@+id/GridWhitesText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/Whites"
+                                android:textColor="#fff"
+                                android:textSize="10sp" />
+                        </LinearLayout>
+
+                    </com.photoEM.gesture.GridTextView>
+
+                    <!--Blacks-->
+                    <com.photoEM.gesture.GridTextView
+                        android:id="@+id/GridBlacks"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="4dp"
+                        android:layout_toEndOf="@+id/GridWhites"
+                        android:background="@drawable/grid_shape">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/GridBlacksValue"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="end"
+                                android:text="@string/BasicValue"
+                                android:textColor="#fff"
+                                android:textSize="21sp" />
+
+                            <TextView
+                                android:id="@+id/GridBlacksText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/Blacks"
+                                android:textColor="#fff"
+                                android:textSize="10sp" />
+                        </LinearLayout>
+
+                    </com.photoEM.gesture.GridTextView>
+
+                </RelativeLayout>
+            </HorizontalScrollView>
 
         </com.photoEM.gesture.GestureImageView>
     </RelativeLayout>
