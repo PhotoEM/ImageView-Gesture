@@ -40,6 +40,6 @@ public class MainActivity extends AppCompatActivity {
         gridList.add(GridBlacks);
 
         mImageView = (GestureImageView) findViewById(R.id.MainImageView);
-        mImageView.GetGridList(gridList);
+        mImageView.getGridList(gridList);
     }
 }

@@ -3,6 +3,7 @@ package com.photoEM.gesture;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -48,7 +49,7 @@ public class GestureImageView extends RelativeLayout {
      * @mWidthGridCount: change according to CustomGridView.
      * @mWidthGrid: mWidthGrid = getMeasuredWidth / mWidthGridCount
      */
-    private int mCurrentWidthGrid, mPreWidthGrid;
+    private int mCurGridIdx, mPreGirdIdx, mPreWidthGrid;
     private int mWidthGrid, mWidthGridCount;
 
     /**
@@ -60,15 +61,12 @@ public class GestureImageView extends RelativeLayout {
      * GridTextView show
      */
     ArrayList<GridTextView> mGridList;
+    ArrayList<Integer> mGridListValue = new ArrayList<>();
+    GridTextView mCurrentGridView;
 
     private float mScale;
     private float mDegree;
     private float mSpacing;
-
-    private TextView mTextView;
-    private TextView mTextView2;
-    private TextView mTextView3;
-    private TextView mTextView4;
 
     /**
      * Construction for Gesture Image View.
@@ -86,8 +84,14 @@ public class GestureImageView extends RelativeLayout {
         setClickable(true);
     }
 
-    public void GetGridList(ArrayList<GridTextView> gridList) {
+    public void getGridList(ArrayList<GridTextView> gridList) {
         mGridList = gridList;
+        mCurrentGridView = mGridList.get(0);
+
+
+        for (int i = 0; i < mGridList.size(); i++) {
+            mGridListValue.add(0);
+        }
     }
 
     /**
@@ -104,7 +108,7 @@ public class GestureImageView extends RelativeLayout {
 
         mCurrentValue = mPreValue = 0;
 
-        mPreWidthGrid = mCurrentWidthGrid = 0;
+        mPreWidthGrid = mCurGridIdx = mPreGirdIdx = 0;
         mWidthGrid = 0;
         mWidthGridCount = 4;
     }
@@ -129,10 +133,11 @@ public class GestureImageView extends RelativeLayout {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        SLIDETYPE SLIDETYPE_FLAG;
+        Log.i(TAG, "mCurGridIdx:" + String.valueOf(mCurGridIdx) + ", mPreGirdIdx:" + String.valueOf(mPreGirdIdx));
         switch (event.getAction() & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_DOWN:
                 Log.i(TAG, "onTouchEvent ACTION_DOWN");
+                mPreGirdIdx = mCurGridIdx;
                 mFingerCount += 1;
                 mPreValue = 0;
                 mPreWidthGrid = 0;
@@ -146,7 +151,7 @@ public class GestureImageView extends RelativeLayout {
                 mDegree = getDegree(event);
                 break;
             case MotionEvent.ACTION_MOVE:
-                Log.i(TAG, "onTouchEvent ACTION_MOVE" + mFingerCount);
+                Log.i(TAG, "onTouchEvent ACTION_MOVE");
                 mTranslationX = mTranslationX + event.getRawX() - mActionX;
                 mTranslationY = mTranslationY + event.getRawY() - mActionY;
                 mActionX = event.getRawX();
@@ -157,7 +162,7 @@ public class GestureImageView extends RelativeLayout {
                     if (getSlideType(mTranslationX, mTranslationY) == SLIDETYPE.UP_DOWN) {
                         offset = getSlideOffset(mTranslationY, SLIDETYPE.UP_DOWN);
                         setSlideValue(offset, 100, -100);
-                        setPageTitleText(mCurrentValue);
+                        changeCurrentGridViewValue();
                     } else if (getSlideType(mTranslationX, mTranslationY) == SLIDETYPE.LEFT_RIGHT) {
                         ChangeGridView((int) mTranslationX);
                     } else {
@@ -167,7 +172,16 @@ public class GestureImageView extends RelativeLayout {
                 break;
             case MotionEvent.ACTION_UP:
                 Log.i(TAG, "onTouchEvent ACTION_UP");
+
+                // action up clean the translation
                 mTranslationX = mTranslationY = 0;
+
+                // action up clean if grid index change then clean the value
+                checkIfChangeGridIdx();
+//                if (mCurGridIdx != mPreGirdIdx) {
+//                    mCurrentValue = mCurrentGridView.getTextValue(mCurGridIdx);
+//                }
+
                 mFingerCount -= 1;
                 break;
             case MotionEvent.ACTION_POINTER_UP:
@@ -180,6 +194,21 @@ public class GestureImageView extends RelativeLayout {
 
         }
         return super.onTouchEvent(event);
+    }
+
+    private void checkIfChangeGridIdx() {
+        Log.i(TAG, "mCurGridIdx:" + String.valueOf(mCurGridIdx) + ", mPreGirdIdx:" + String.valueOf(mPreGirdIdx));
+
+        if (mCurGridIdx != mPreGirdIdx) {
+            mCurrentValue = mGridListValue.get(mCurGridIdx);
+        } else {
+            mGridListValue.set(mCurGridIdx, mCurrentValue);
+        }
+    }
+
+    private void changeCurrentGridViewValue() {
+        mCurrentGridView = mGridList.get(mCurGridIdx);
+        mCurrentGridView.changeValue(mCurrentValue, mCurGridIdx);
     }
 
     /**
@@ -229,14 +258,6 @@ public class GestureImageView extends RelativeLayout {
         }
     }
 
-
-    /**
-     * Get slide screen value
-     */
-    private int getSlideValue() {
-        return mCurrentValue;
-    }
-
     /**
      * @return 0 for slide up and down, 1 for slide left and right
      */
@@ -253,22 +274,13 @@ public class GestureImageView extends RelativeLayout {
 
     private void ChangeGridView(int value) {
         int offset = (value / mWidthGrid);
-        mCurrentWidthGrid += offset - mPreWidthGrid;
-        if (mCurrentWidthGrid > mWidthGridCount - 1) {
-            mCurrentWidthGrid = mWidthGridCount - 1;
-        } else if (mCurrentWidthGrid < 0) {
-            mCurrentWidthGrid = 0;
+        mCurGridIdx += offset - mPreWidthGrid;
+        if (mCurGridIdx > mWidthGridCount - 1) {
+            mCurGridIdx = mWidthGridCount - 1;
+        } else if (mCurGridIdx < 0) {
+            mCurGridIdx = 0;
         }
         mPreWidthGrid = offset;
-        Log.i(TAG, mWidthGrid + ", " + offset + " ," + mCurrentWidthGrid);
-        if (mCurrentWidthGrid == 0) {
-            mTextView.setTextColor(Color.parseColor("#FF0000"));
-        }
-
-    }
-
-
-    public void setPageTitleText(int value) {
-        mTextView.setText(String.valueOf(value));
+        Log.i(TAG, mWidthGrid + ", offset " + offset + " ,mCurGridIdx " + mCurGridIdx);
     }
 }
