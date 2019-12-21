@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">Gesture</string>
+
+    <string name="BasicValue">0</string>
+
+    <string name="Luminance">亮度</string>
+    <string name="Contrast">对比度</string>
+    <string name="Exposure">曝光度</string>
+    <string name="HighLight">高光</string>
+    <string name="Shadows">阴影</string>
+    <string name="Whites">白色色阶</string>
+    <string name="Blacks">黑色色阶</string>
+
 </resources>
