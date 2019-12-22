@@ -37,7 +37,7 @@
                     android:layout_height="wrap_content">
 
                     <!--Luminance-->
-                    <com.photoEM.gesture.GridTextView
+                    <com.photoEM.gesture.GridView
                         android:id="@+id/GridLuminance"
                         android:layout_width="65dp"
                         android:layout_height="65dp"
@@ -69,10 +69,10 @@
                                 android:textSize="10sp" />
                         </LinearLayout>
 
-                    </com.photoEM.gesture.GridTextView>
+                    </com.photoEM.gesture.GridView>
 
                     <!--Contrast-->
-                    <com.photoEM.gesture.GridTextView
+                    <com.photoEM.gesture.GridView
                         android:id="@+id/GridContrast"
                         android:layout_width="65dp"
                         android:layout_height="65dp"
@@ -105,10 +105,10 @@
                                 android:textSize="10sp" />
                         </LinearLayout>
 
-                    </com.photoEM.gesture.GridTextView>
+                    </com.photoEM.gesture.GridView>
 
                     <!--Exposure-->
-                    <com.photoEM.gesture.GridTextView
+                    <com.photoEM.gesture.GridView
                         android:id="@+id/GridExposure"
                         android:layout_width="65dp"
                         android:layout_height="65dp"
@@ -141,10 +141,10 @@
                                 android:textSize="10sp" />
                         </LinearLayout>
 
-                    </com.photoEM.gesture.GridTextView>
+                    </com.photoEM.gesture.GridView>
 
                     <!--HighLight-->
-                    <com.photoEM.gesture.GridTextView
+                    <com.photoEM.gesture.GridView
                         android:id="@+id/GridHighLight"
                         android:layout_width="65dp"
                         android:layout_height="65dp"
@@ -177,10 +177,10 @@
                                 android:textSize="10sp" />
                         </LinearLayout>
 
-                    </com.photoEM.gesture.GridTextView>
+                    </com.photoEM.gesture.GridView>
 
                     <!--Shadows-->
-                    <com.photoEM.gesture.GridTextView
+                    <com.photoEM.gesture.GridView
                         android:id="@+id/GridShadows"
                         android:layout_width="65dp"
                         android:layout_height="65dp"
@@ -213,10 +213,10 @@
                                 android:textSize="10sp" />
                         </LinearLayout>
 
-                    </com.photoEM.gesture.GridTextView>
+                    </com.photoEM.gesture.GridView>
 
                     <!--Whites-->
-                    <com.photoEM.gesture.GridTextView
+                    <com.photoEM.gesture.GridView
                         android:id="@+id/GridWhites"
                         android:layout_width="65dp"
                         android:layout_height="65dp"
@@ -249,10 +249,10 @@
                                 android:textSize="10sp" />
                         </LinearLayout>
 
-                    </com.photoEM.gesture.GridTextView>
+                    </com.photoEM.gesture.GridView>
 
                     <!--Blacks-->
-                    <com.photoEM.gesture.GridTextView
+                    <com.photoEM.gesture.GridView
                         android:id="@+id/GridBlacks"
                         android:layout_width="65dp"
                         android:layout_height="65dp"
@@ -285,7 +285,7 @@
                                 android:textSize="10sp" />
                         </LinearLayout>
 
-                    </com.photoEM.gesture.GridTextView>
+                    </com.photoEM.gesture.GridView>
 
                 </RelativeLayout>
             </HorizontalScrollView>
