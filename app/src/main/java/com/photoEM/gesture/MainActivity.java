@@ -2,10 +2,11 @@ package com.photoEM.gesture;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private GridView GridLuminance;
     private GridView GridContrast;
@@ -39,7 +40,49 @@ public class MainActivity extends AppCompatActivity {
         gridList.add(GridWhites);
         gridList.add(GridBlacks);
 
+        GridLuminance.setOnClickListener(this);
+        GridContrast.setOnClickListener(this);
+        GridExposure.setOnClickListener(this);
+        GridHighLight.setOnClickListener(this);
+        GridShadows.setOnClickListener(this);
+        GridWhites.setOnClickListener(this);
+        GridBlacks.setOnClickListener(this);
+
         mImageView = (GestureImageView) findViewById(R.id.MainImageView);
-        mImageView.getGridList(gridList);
+        mImageView.setGridList(gridList);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.GridLuminance:
+                mImageView.selectedGrid(0);
+                mImageView.updateGridBackground(0);
+                break;
+            case R.id.GridContrast:
+                mImageView.selectedGrid(1);
+                mImageView.updateGridBackground(1);
+                break;
+            case R.id.GridExposure:
+                mImageView.selectedGrid(2);
+                mImageView.updateGridBackground(2);
+                break;
+            case R.id.GridHighLight:
+                mImageView.selectedGrid(3);
+                mImageView.updateGridBackground(3);
+                break;
+            case R.id.GridShadows:
+                mImageView.selectedGrid(4);
+                mImageView.updateGridBackground(4);
+                break;
+            case R.id.GridWhites:
+                mImageView.selectedGrid(5);
+                mImageView.updateGridBackground(5);
+                break;
+            case R.id.GridBlacks:
+                mImageView.selectedGrid(6);
+                mImageView.updateGridBackground(6);
+                break;
+        }
     }
 }

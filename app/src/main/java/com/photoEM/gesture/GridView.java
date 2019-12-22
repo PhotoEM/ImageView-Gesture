@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -20,10 +21,11 @@ public class GridView extends RelativeLayout {
     private float mViewHeight;
     private float mViewHalfHeight;
 
-    private Paint mPaint;
+    private Paint mRectPaint;
     private Paint mEdgePaint;
 
     private int mValue;
+    private int mGirdId;
 
     public GridView(Context context) {
         this(context, null);
@@ -31,18 +33,19 @@ public class GridView extends RelativeLayout {
 
     @SuppressLint("ResourceAsColor")
     private void init() {
-        mPaint = new Paint();
+        mRectPaint = new Paint();
         mEdgePaint = new Paint();
         mValue = 0;
+        mGirdId = 0;
 
         mEdgePaint.setStyle(Paint.Style.STROKE);
         mEdgePaint.setStrokeWidth(10);
         mEdgePaint.setColor(Color.WHITE);
 
-        mPaint.setStyle(Paint.Style.FILL);
-        mPaint.setColor(Color.LTGRAY);
-        mPaint.setAlpha(150);
-        mPaint.setAntiAlias(true);
+        mRectPaint.setStyle(Paint.Style.FILL);
+        mRectPaint.setColor(Color.LTGRAY);
+        mRectPaint.setAlpha(150);
+        mRectPaint.setAntiAlias(true);
     }
 
     public GridView(Context context, AttributeSet attrs) {
@@ -52,6 +55,7 @@ public class GridView extends RelativeLayout {
 
     public GridView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        setClickable(true);
     }
 
     @Override
@@ -76,13 +80,13 @@ public class GridView extends RelativeLayout {
 
         float offset = (float) mValue * mViewHalfHeight / 100;
         if (mValue > 0) {
-            // canvas.drawRect(0, mViewHalfHeight - offset, mViewWidth, mViewHalfHeight, mPaint);
+            // canvas.drawRect(0, mViewHalfHeight - offset, mViewWidth, mViewHalfHeight, mRectPaint);
             RectF oval = new RectF(0, mViewHalfHeight - offset, mViewWidth, mViewHalfHeight);
-            canvas.drawRoundRect(oval, 15, 15, mPaint);
+            canvas.drawRoundRect(oval, 15, 15, mRectPaint);
         } else if (mValue < 0) {
-            // canvas.drawRect(0, mViewHalfHeight, mViewWidth, mViewHalfHeight - offset, mPaint);
+            // canvas.drawRect(0, mViewHalfHeight, mViewWidth, mViewHalfHeight - offset, mRectPaint);
             RectF oval = new RectF(0, mViewHalfHeight, mViewWidth, mViewHalfHeight - offset);
-            canvas.drawRoundRect(oval, 15, 15, mPaint);
+            canvas.drawRoundRect(oval, 15, 15, mRectPaint);
         }
 
         canvas.drawRoundRect(2.5f, 2.5f, mViewWidth - 2.5f, mViewHeight - 2.5f, 20, 20, mEdgePaint);
@@ -98,10 +102,11 @@ public class GridView extends RelativeLayout {
      * gridList.add(GridWhites);
      * gridList.add(GridBlacks);
      *
-     * @param gridIdx
+     * @param gridId
      */
-    private void setCurTextView(int gridIdx) {
-        switch (gridIdx) {
+    private void setCurTextView(int gridId) {
+        mGirdId = gridId;
+        switch (gridId) {
             case 0:
                 mTextView = (TextView) findViewById(R.id.GridLuminanceValue);
                 break;
@@ -129,9 +134,9 @@ public class GridView extends RelativeLayout {
         }
     }
 
-    public void changeValue(int value, int gridIdx) {
+    public void changeValue(int value, int gridId) {
         mValue = value;
-        setCurTextView(gridIdx);
+        setCurTextView(gridId);
         mTextView.setText(String.valueOf(mValue));
 
         invalidate();
@@ -139,6 +144,10 @@ public class GridView extends RelativeLayout {
 
     public void changeShapeBackground() {
         setBackgroundResource(R.drawable.grid_shape_select);
+    }
+
+    public int getValue() {
+        return this.mValue;
     }
 
 }

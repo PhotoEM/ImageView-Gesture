@@ -44,7 +44,7 @@ public class GestureImageView extends RelativeLayout {
      *
      * @mWidthGrid: mWidthGrid = getMeasuredWidth / SCREEN_GRID_COUNT
      */
-    private int mCurGridIdx, mPreGirdIdx;
+    private int mCurGridId, mPreGirdId;
 
     /**
      * Signal finger slide up&down value parameters.
@@ -58,7 +58,6 @@ public class GestureImageView extends RelativeLayout {
      * GridView show
      */
     ArrayList<GridView> mGridList;
-    ArrayList<Integer> mGridListValue = new ArrayList<>();
     GridView mCurrentGridView;
 
     private float mScale;
@@ -84,7 +83,7 @@ public class GestureImageView extends RelativeLayout {
         mTranslationX = mTranslationY = mActionX = mActionY = 0;
 
         mCurValue = mPreValue = 0;
-        mCurGridIdx = mPreGirdIdx = 0;
+        mCurGridId = mPreGirdId = 0;
 
         FlagUpDown = FlagLeftRight = false;
     }
@@ -94,14 +93,11 @@ public class GestureImageView extends RelativeLayout {
         setClickable(true);
     }
 
-    public void getGridList(ArrayList<GridView> gridList) {
+    public void setGridList(ArrayList<GridView> gridList) {
         mGridList = gridList;
+
         mCurrentGridView = mGridList.get(0);
         mCurrentGridView.changeShapeBackground();
-
-        for (int i = 0; i < mGridList.size(); i++) {
-            mGridListValue.add(0);
-        }
     }
 
     /**
@@ -131,7 +127,7 @@ public class GestureImageView extends RelativeLayout {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        // Log.i(TAG, "mCurGridIdx:" + String.valueOf(mCurGridIdx) + ", mPreGirdIdx:" + String.valueOf(mPreGirdIdx));
+        // Log.i(TAG, "mCurGridId:" + String.valueOf(mCurGridId) + ", mPreGirdId:" + String.valueOf(mPreGirdId));
 
         switch (event.getAction() & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_DOWN:
@@ -139,7 +135,7 @@ public class GestureImageView extends RelativeLayout {
 
                 mFingerCount += 1;
                 mPreValue = 0;
-                mPreGirdIdx = 0;
+                mPreGirdId = 0;
                 mActionX = event.getRawX();
                 mActionY = event.getRawY();
                 FlagUpDown = FlagLeftRight = false;
@@ -169,8 +165,9 @@ public class GestureImageView extends RelativeLayout {
                         } else if (mTranslationY > 0) {
                             offset = getSlideOffset(mTranslationY - SLIDE_DISTANCE, SLIDE_TYPE.UP_DOWN);
                         }
+
                         setSlideValue(-offset, 100, -100);
-                        changeGridViewWithValue(mCurValue, mCurGridIdx);
+                        changeGridViewWithValue(mCurValue, mCurGridId);
                         break;
                     }
                     if (FlagLeftRight) {
@@ -180,7 +177,7 @@ public class GestureImageView extends RelativeLayout {
                             offset = getSlideOffset(mTranslationX - SLIDE_DISTANCE, SLIDE_TYPE.LEFT_RIGHT);
                         }
                         setSlideGrid(offset, mGridList.size() - 1, 0);
-                        changeGridView(mCurGridIdx);
+                        updateGridBackground(mCurGridId);
                         break;
                     }
 
@@ -201,6 +198,8 @@ public class GestureImageView extends RelativeLayout {
                 }
                 break;
             case MotionEvent.ACTION_UP:
+                mFingerCount -= 1;
+
                 // action up clean the translation
                 mTranslationX = mTranslationY = 0;
 
@@ -208,14 +207,9 @@ public class GestureImageView extends RelativeLayout {
                 checkIfChangeGridIdx();
 
                 // reverse shape background
-                for (int i = 0; i < mGridList.size(); i++) {
-                    if (i == mCurGridIdx) {
-                        continue;
-                    }
-                    mGridList.get(i).setBackgroundResource(R.drawable.grid_shape);
-                }
+                updateGridBackground(mCurGridId);
 
-                mFingerCount -= 1;
+
                 break;
             case MotionEvent.ACTION_POINTER_UP:
                 Log.i(TAG, "onTouchEvent ACTION_POINTER_UP");
@@ -230,10 +224,8 @@ public class GestureImageView extends RelativeLayout {
     }
 
     private void checkIfChangeGridIdx() {
-        if (mCurGridIdx != mPreGirdIdx) {
-            mCurValue = mGridListValue.get(mCurGridIdx);
-        } else {
-            mGridListValue.set(mCurGridIdx, mCurValue);
+        if (mCurGridId != mPreGirdId) {
+            this.mCurValue = mGridList.get(mCurGridId).getValue();
         }
     }
 
@@ -241,8 +233,20 @@ public class GestureImageView extends RelativeLayout {
         mGridList.get(gridIdx).changeValue(value, gridIdx);
     }
 
-    private void changeGridView(int gridIdx) {
-        mGridList.get(gridIdx).setBackgroundResource(R.drawable.grid_shape_select);
+    /**
+     * Update GirdView Background with grid shape select. Used in ACTION_UP and onClick GridView.
+     *
+     * @param gridId
+     */
+    public void updateGridBackground(int gridId) {
+        mGridList.get(gridId).setBackgroundResource(R.drawable.grid_shape_select);
+
+        for (int i = 0; i < mGridList.size(); i++) {
+            if (i == gridId) {
+                continue;
+            }
+            mGridList.get(i).setBackgroundResource(R.drawable.grid_shape);
+        }
     }
 
     /**
@@ -280,7 +284,7 @@ public class GestureImageView extends RelativeLayout {
     }
 
     /**
-     * Set slide screen value
+     * Set slide screen value for up and down
      */
     private void setSlideValue(int offset, int max, int min) {
         mCurValue += offset - mPreValue;
@@ -292,13 +296,20 @@ public class GestureImageView extends RelativeLayout {
         }
     }
 
+    /**
+     * Set slide screen value for left and right
+     *
+     * @param offset
+     * @param max
+     * @param min
+     */
     private void setSlideGrid(int offset, int max, int min) {
-        mCurGridIdx += offset - mPreGirdIdx;
-        mPreGirdIdx = offset;
-        if (mCurGridIdx > max) {
-            mCurGridIdx = max;
-        } else if (mCurGridIdx < min) {
-            mCurGridIdx = min;
+        mCurGridId += offset - mPreGirdId;
+        mPreGirdId = offset;
+        if (mCurGridId > max) {
+            mCurGridId = max;
+        } else if (mCurGridId < min) {
+            mCurGridId = min;
         }
     }
 
@@ -313,5 +324,12 @@ public class GestureImageView extends RelativeLayout {
         } else {
             return SLIDE_TYPE.UNKNOW;
         }
+    }
+
+
+    public boolean selectedGrid(int gridId) {
+        this.mCurGridId = gridId;
+        this.mCurValue = mGridList.get(gridId).getValue();
+        return true;
     }
 }
